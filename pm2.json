@@ -4,11 +4,6 @@
             "name": "mean-reversion:TWTR",
             "script": "./strategies/mean-reversion.js",
             "args": "TWTR"
-        },
-        {
-            "name": "mean-reversion:AAPL",
-            "script": "./strategies/mean-reversion.js",
-            "args": "AAPL"
         }
     ]
 }

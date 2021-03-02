@@ -1,5 +1,12 @@
 require('../lib/setup');
 
+function diff(o, n) {
+    let num = n - o;
+    let den = Math.abs(o);
+
+    return Math.abs(num / den);
+}
+
 class MeanReversion {
     constructor(stock = 'AAPL') {
         this.alpaca = require('../lib/alpaca');
@@ -204,7 +211,9 @@ class MeanReversion {
         });
         this.runningAverage /= 20;
 
-        if (currPrice > this.runningAverage) {
+        // greater than running average and
+        // 0.1% greater than average
+        if (currPrice > this.runningAverage && diff(this.runningAverage, currPrice) > 0.001) {
             // Sell our position if the price is above the running average, if any.
             if (positionQuantity > 0) {
                 console.log('Setting position to zero.');
@@ -216,7 +225,7 @@ class MeanReversion {
                 );
             } else
                 console.log('No position in the stock.  No action required.');
-        } else if (currPrice < this.runningAverage) {
+        } else if (currPrice < this.runningAverage && diff(this.runningAverage, currPrice) >= 0.01) {
             // Determine optimal amount of shares based on portfolio and market data.
             var portfolioValue;
             var buyingPower;
@@ -231,7 +240,9 @@ class MeanReversion {
                 });
             var portfolioShare =
                 ((this.runningAverage - currPrice) / currPrice) * 200;
+
             var targetPositionValue = portfolioValue * portfolioShare;
+            console.log(`Wanting to take ${portfolioShare} portfolio share of ${targetPostitionValue} target.`);
             var amountToAdd = targetPositionValue - positionValue;
 
             // Add to our position, constrained by our buying power; or, sell down to optimal amount of shares.
@@ -353,10 +364,10 @@ class MeanReversion {
         }
     }
 }
-
 const args = process.argv.slice(2);
 const stock = args[0];
 
 const MR = new MeanReversion(stock);
 
 MR.run();
+
