@@ -249,7 +249,7 @@ class MeanReversion {
                 console.log('No position in the stock.  No action required.');
         } else if (
             currPrice < this.runningAverage &&
-            diff(this.runningAverage, currPrice) >= 0.01
+            diff(this.runningAverage, currPrice) >= 0.001
         ) {
             // Determine optimal amount of shares based on portfolio and market data.
             var portfolioValue;
