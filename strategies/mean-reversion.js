@@ -202,19 +202,20 @@ class MeanReversion {
         var currPrice = bars[bars.length - 1].closePrice;
         var nm1Price = bars[bars.length - 2].closePrice || 0;
 
-        for (let bar of bars) {
-            if (bar.closePrice === 0) {
-                console.log('Bad data, close price of zero.');
-                console.log(bars);
-                return;
-            }
-        }
-
         this.runningAverage = 0;
+        let valid = 0;
         bars.forEach((bar) => {
-            this.runningAverage += bar.closePrice;
+            let value = bar.closePrice;
+            if (value === 0 && bar.openPrice !== 0) {
+                value = bar.openPrice;
+            }
+
+            if (value !== 0) {
+                valid++;
+                this.runningAverage += bar.closePrice;
+            }
         });
-        this.runningAverage /= 20;
+        this.runningAverage /= valid;
 
         let goingDown = currPrice < nm1Price;
 
