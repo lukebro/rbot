@@ -1,5 +1,5 @@
 const API_KEY = 'PKVYFSJWPMTXKCZAB8AN';
-const API_SECRET = '';
+const API_SECRET = 'heljdfkdf';
 const PAPER = true;
 
 class MeanReversion {
