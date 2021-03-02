@@ -202,6 +202,10 @@ class MeanReversion {
         var currPrice = bars[bars.length - 1].closePrice;
         var nm1Price = bars[bars.length - 2].closePrice || 0;
 
+        let l = bars.map(x => x.closePrice);
+
+        console.log({ bars: l });
+
         this.runningAverage = 0;
         bars.forEach((bar) => {
             this.runningAverage += bar.closePrice;
