@@ -200,7 +200,7 @@ class MeanReversion {
                 console.log(err.error);
             });
         var currPrice = bars[bars.length - 1].closePrice;
-        var nm1Price = bars[bars.length - 2].closePrice;
+        var nm1Price = bars[bars.length - 2].closePrice || 0;
 
         this.runningAverage = 0;
         bars.forEach((bar) => {
@@ -248,10 +248,19 @@ class MeanReversion {
                 ((this.runningAverage - currPrice) / currPrice) * 200;
 
             var targetPositionValue = portfolioValue * portfolioShare;
-            console.log(
-                `Wanting to take ${portfolioShare} portfolio share of ${targetPositionValue} target.`
-            );
+
             var amountToAdd = targetPositionValue - positionValue;
+
+            console.log({
+                portfolioValue,
+                buyingPower,
+                runningAverage: this.runningAverage,
+                currPrice,
+                nm1Price,
+                portfolioShare,
+                targetPositionValue,
+                amountToAdd,
+            });
 
             // Add to our position, constrained by our buying power; or, sell down to optimal amount of shares.
             if (amountToAdd > 0) {
