@@ -1,9 +1,9 @@
 {
     "apps": [
         {
-            "name": "mean-reversion:TWTR",
+            "name": "mean-reversion",
             "script": "./strategies/mean-reversion.js",
-            "args": "TWTR"
+            "args": "DIS"
         }
     ]
 }
