@@ -205,7 +205,7 @@ class MeanReversion {
         for (let bar of bars) {
             if (bar.closePrice === 0) {
                 console.log('Bad data, close price of zero.');
-
+                console.log(bars);
                 return;
             }
         }
