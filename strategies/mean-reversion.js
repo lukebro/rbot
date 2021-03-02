@@ -202,10 +202,9 @@ class MeanReversion {
         var currPrice = bars[bars.length - 1].closePrice;
         var nm1Price = bars[bars.length - 2].closePrice || 0;
 
-
         for (let bar of bars) {
             if (bar.closePrice === 0) {
-                console.log("Bad data, close price of zero.");
+                console.log('Bad data, close price of zero.');
 
                 return;
             }
@@ -238,7 +237,10 @@ class MeanReversion {
         ) {
             // Sell our position if the price is above the running average, if any.
             if (positionQuantity > 0) {
-                console.log('Setting position to zero.');
+                console.log(
+                    'Setting position to zero. Diff: ',
+                    diff(this.runningAverage, currPrice)
+                );
                 await this.submitLimitOrder(
                     positionQuantity,
                     this.stock,
@@ -247,10 +249,7 @@ class MeanReversion {
                 );
             } else
                 console.log('No position in the stock.  No action required.');
-        } else if (
-            currPrice < this.runningAverage &&
-            diff(this.runningAverage, currPrice) >= 0.001
-        ) {
+        } else if (currPrice < this.runningAverage) {
             // Determine optimal amount of shares based on portfolio and market data.
             var portfolioValue;
             var buyingPower;
@@ -279,6 +278,7 @@ class MeanReversion {
                 portfolioShare,
                 targetPositionValue,
                 amountToAdd,
+                diff: diff(this.runningAverage, currPrice),
             });
 
             // Add to our position, constrained by our buying power; or, sell down to optimal amount of shares.
