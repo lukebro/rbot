@@ -38,8 +38,7 @@ class MeanReversion {
 
         // Wait for market to open.
         console.log('Waiting for market to open...');
-        var promMarket = this.awaitMarketOpen();
-        await promMarket;
+        await this.awaitMarketOpen();
         console.log('Market opened.');
 
         // Get the running average of prices of the last 20 minutes, waiting until we have 20 bars from market open.
@@ -165,10 +164,6 @@ class MeanReversion {
                                 .catch((err) => {
                                     console.log(err.error);
                                 });
-                            console.log(
-                                this.timeToClose +
-                                    ' minutes til next market open.'
-                            );
                         }
                     })
                     .catch((err) => {
@@ -205,15 +200,23 @@ class MeanReversion {
                 console.log(err.error);
             });
         var currPrice = bars[bars.length - 1].closePrice;
+        var nm1Price = bars[bars.length - 2].closePrice;
+
         this.runningAverage = 0;
         bars.forEach((bar) => {
             this.runningAverage += bar.closePrice;
         });
         this.runningAverage /= 20;
 
+        let goingDown = currPrice < nm1Price;
+
         // greater than running average and
         // 0.1% greater than average
-        if (currPrice > this.runningAverage && diff(this.runningAverage, currPrice) > 0.001) {
+        if (
+            goingDown &&
+            currPrice > this.runningAverage &&
+            diff(this.runningAverage, currPrice) > 0.01
+        ) {
             // Sell our position if the price is above the running average, if any.
             if (positionQuantity > 0) {
                 console.log('Setting position to zero.');
@@ -225,7 +228,10 @@ class MeanReversion {
                 );
             } else
                 console.log('No position in the stock.  No action required.');
-        } else if (currPrice < this.runningAverage && diff(this.runningAverage, currPrice) >= 0.01) {
+        } else if (
+            currPrice < this.runningAverage &&
+            diff(this.runningAverage, currPrice) >= 0.01
+        ) {
             // Determine optimal amount of shares based on portfolio and market data.
             var portfolioValue;
             var buyingPower;
@@ -242,7 +248,9 @@ class MeanReversion {
                 ((this.runningAverage - currPrice) / currPrice) * 200;
 
             var targetPositionValue = portfolioValue * portfolioShare;
-            console.log(`Wanting to take ${portfolioShare} portfolio share of ${targetPostitionValue} target.`);
+            console.log(
+                `Wanting to take ${portfolioShare} portfolio share of ${targetPostitionValue} target.`
+            );
             var amountToAdd = targetPositionValue - positionValue;
 
             // Add to our position, constrained by our buying power; or, sell down to optimal amount of shares.
@@ -370,4 +378,3 @@ const stock = args[0];
 const MR = new MeanReversion(stock);
 
 MR.run();
-
