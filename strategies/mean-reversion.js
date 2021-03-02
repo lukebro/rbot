@@ -210,6 +210,16 @@ class MeanReversion {
 
         let goingDown = currPrice < nm1Price;
 
+        console.log({
+            rebalancing: true,
+            runningAverage: this.runningAverage,
+            currPrice,
+            nm1Price,
+            goingDown,
+            positionQuantity,
+            positionValue,
+        });
+
         // greater than running average and
         // 0.1% greater than average
         if (
