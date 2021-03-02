@@ -230,11 +230,7 @@ class MeanReversion {
 
         // greater than running average and
         // 0.1% greater than average
-        if (
-            goingDown &&
-            currPrice > this.runningAverage &&
-            diff(this.runningAverage, currPrice) > 0.01
-        ) {
+        if (goingDown && currPrice > this.runningAverage) {
             // Sell our position if the price is above the running average, if any.
             if (positionQuantity > 0) {
                 console.log(
