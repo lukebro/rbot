@@ -1,12 +1,5 @@
 require('../lib/setup');
 
-const args = process.argv.slice(2);
-const stock = args[0];
-
-const MR = new MeanReversion(stock);
-
-MR.run();
-
 class MeanReversion {
     constructor(stock = 'AAPL') {
         this.alpaca = require('../lib/alpaca');
@@ -360,3 +353,10 @@ class MeanReversion {
         }
     }
 }
+
+const args = process.argv.slice(2);
+const stock = args[0];
+
+const MR = new MeanReversion(stock);
+
+MR.run();
