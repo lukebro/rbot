@@ -249,7 +249,7 @@ class MeanReversion {
 
             var targetPositionValue = portfolioValue * portfolioShare;
             console.log(
-                `Wanting to take ${portfolioShare} portfolio share of ${targetPostitionValue} target.`
+                `Wanting to take ${portfolioShare} portfolio share of ${targetPositionValue} target.`
             );
             var amountToAdd = targetPositionValue - positionValue;
 
