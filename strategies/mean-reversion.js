@@ -1,3 +1,5 @@
+require('../lib/setup');
+
 class MeanReversion {
   constructor(stock = 'AAPL'){
     this.alpaca = require('../lib/alpaca');
