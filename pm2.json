@@ -3,7 +3,7 @@
         {
             "name": "mean-reversion",
             "script": "./strategies/mean-reversion.js",
-            "args": "DIS"
+            "args": "TWTR"
         }
     ]
 }
