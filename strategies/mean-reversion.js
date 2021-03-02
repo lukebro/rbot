@@ -1,21 +1,10 @@
-const API_KEY = 'PKVYFSJWPMTXKCZAB8AN';
-testing
-const API_SECRET = 'heljdfkdf';
-const PAPER = true;
-
 class MeanReversion {
-  constructor(API_KEY, API_SECRET, PAPER){
-    this.Alpaca = require('@alpacahq/alpaca-trade-api');
-    this.alpaca = new this.Alpaca({
-      keyId: API_KEY,
-      secretKey: API_SECRET,
-      paper: PAPER
-    });
+  constructor(stock = 'AAPL'){
+    this.alpaca = require('../lib/alpaca');
     this.runningAverage = 0;
     this.lastOrder = null;
     this.timeToClose = null;
-    // Stock that the algo will trade.
-    this.stock = "AAPL";
+    this.stock = stock;
   }
 
   async run(){
@@ -98,12 +87,9 @@ class MeanReversion {
   // Spin until the market is open
   awaitMarketOpen(){
     var prom = new Promise((resolve, reject) => {
-        console.log('hi');
       var isOpen = false;
       var marketChecker = setInterval(async ()=>{
-          console.log("checking");
         await this.alpaca.getClock().then(async (resp) => {
-            console.log(resp);
           isOpen = resp.is_open;
           if(isOpen) {
             clearInterval(marketChecker);
@@ -119,7 +105,7 @@ class MeanReversion {
             console.log(this.timeToClose + " minutes til next market open.")
           }
         }).catch((err) => {console.log(err.error);});
-      }, 1000);
+      }, 60000);
     });
     return prom;
   }
@@ -228,6 +214,6 @@ class MeanReversion {
   }
 }
 
-// Run the mean reversion class.
-var MR = new MeanReversion(API_KEY, API_SECRET, PAPER);
-MR.run();
+const MR = new MeanReversion();
+
+console.log(process.argv.slice(2));
